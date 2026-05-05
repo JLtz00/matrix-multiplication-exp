@@ -37,34 +37,47 @@ double median(vector<double> &v) {
 
 int main() {
 
-  vector<int> sizes = {2, 4, 8, 16, 32, 64, 128, 256};
-  int repetitions = 7;
-  int threshold = 32;
+  vector<int> sizes = {8, 16, 32, 64, 128, 256, 512, 1024};
+  vector<int> thresholds = {16, 32, 64};
+  int repetitions = 15;
 
-  ofstream file("results/results.csv");
-  file << "n,standard,strassen\n";
+  ofstream file("results/results_multi_thresholds.csv");
+  file << "n,standard";
+  for (int t : thresholds) {
+    file << ", strassen_" << t;
+  }
+  file << "\n";
 
   for (int n : sizes) {
-
     vector<double> A = generateMatrix(n, 1);
     vector<double> B = generateMatrix(n, 2);
     vector<double> C(n * n);
 
-    vector<double> timesStd;
-    vector<double> timesStr;
-
+    // Estandar
+    vector<double> timeStd;
     for (int i = 0; i < repetitions; i++) {
-
-      timesStd.push_back(measureStandard(A, B, C, n));
-      timesStr.push_back(measureStrassen(A, B, C, n, threshold));
+      timeStd.push_back(measureStandard(A, B, C, n));
     }
 
-    double tStd = median(timesStd);
-    double tStr = median(timesStr);
+    double tStd = median(timeStd);
 
-    cout << "n=" << n << " std=" << tStd << " str=" << tStr << endl;
+    // Strassen
+    vector<double> resultsStr;
+    for (int t : thresholds) {
+      vector<double> timeStr;
+      for (int i = 0; i < repetitions; i++) {
+        timeStr.push_back(measureStrassen(A, B, C, n, t));
+      }
+      resultsStr.push_back(median(timeStr));
+    }
 
-    file << n << "," << tStd << "," << tStr << "\n";
+    file << n << "," << tStd;
+    for (double val : resultsStr) {
+      file << "," << val;
+    }
+    file << "\n";
+
+    cout << "n=" << n << " done\n";
   }
 
   file.close();
