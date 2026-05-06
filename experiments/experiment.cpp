@@ -37,11 +37,11 @@ double median(vector<double> &v) {
 
 int main() {
 
-  vector<int> sizes = {64, 128, 256, 512, 1024, 2048, 4096};
+  vector<int> sizes = {8, 16, 32, 64, 128};
   vector<int> thresholds = {16, 32, 64};
-  int repetitions = 15;
+  int repetitions = 101;
 
-  ofstream file("results/results_multi_thresholds4.csv");
+  ofstream file("results/results_multi_thresholds5.csv");
   file << "n,standard";
   for (int t : thresholds) {
     file << ", strassen_" << t;
