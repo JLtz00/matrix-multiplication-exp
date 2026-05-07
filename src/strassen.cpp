@@ -5,6 +5,7 @@ void multiplyStandard(const vector<double> &A, const vector<double> &B, vector<d
 
 void add(const vector<double> &A, const vector<double> &B, vector<double> &C, int n);
 void sub(const vector<double> &A, const vector<double> &B, vector<double> &C, int n);
+int nextPowerOfTwo(int n);
 
 void strassen(const vector<double> &A, const vector<double> &B, vector<double> &C, int n, int threshold) {
 
@@ -106,6 +107,34 @@ void strassen(const vector<double> &A, const vector<double> &B, vector<double> &
       C[i * n + j + newSize] = C12[idx];
       C[(i + newSize) * n + j] = C21[idx];
       C[(i + newSize) * n + j + newSize] = C22[idx];
+    }
+  }
+}
+
+void strassenWrapper(const vector<double> &A, const vector<double> &B, vector<double> &C, int n, int threshold) {
+
+  int m = nextPowerOfTwo(n);
+
+  // matrices padded
+  vector<double> A_pad(m * m, 0.0);
+  vector<double> B_pad(m * m, 0.0);
+  vector<double> C_pad(m * m, 0.0);
+
+  // copiar datos originales
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      A_pad[i * m + j] = A[i * n + j];
+      B_pad[i * m + j] = B[i * n + j];
+    }
+  }
+
+  // ejecutar strassen
+  strassen(A_pad, B_pad, C_pad, m, threshold);
+
+  // recortar resultado
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      C[i * n + j] = C_pad[i * m + j];
     }
   }
 }

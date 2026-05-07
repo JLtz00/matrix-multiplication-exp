@@ -22,3 +22,12 @@ void sub(const vector<double> &A, const vector<double> &B, vector<double> &C, in
   for (int i = 0; i < n * n; i++)
     C[i] = A[i] - B[i];
 }
+
+int nextPowerOfTwo(int n) {
+  int power = 1;
+
+  while (power < n)
+    power <<= 1;
+
+  return power;
+}
