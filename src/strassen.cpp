@@ -6,6 +6,7 @@ void multiplyStandard(const vector<double> &A, const vector<double> &B, vector<d
 void add(const vector<double> &A, const vector<double> &B, vector<double> &C, int n);
 void sub(const vector<double> &A, const vector<double> &B, vector<double> &C, int n);
 int nextPowerOfTwo(int n);
+bool isPowerOfTwo(int n);
 
 void strassen(const vector<double> &A, const vector<double> &B, vector<double> &C, int n, int threshold) {
 
@@ -112,6 +113,11 @@ void strassen(const vector<double> &A, const vector<double> &B, vector<double> &
 }
 
 void strassenWrapper(const vector<double> &A, const vector<double> &B, vector<double> &C, int n, int threshold) {
+
+  if (isPowerOfTwo(n)) {
+    strassen(A, B, C, n, threshold);
+    return;
+  }
 
   int m = nextPowerOfTwo(n);
 
